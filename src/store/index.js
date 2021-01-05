@@ -4,6 +4,7 @@ import axios from 'axios'
 export default createStore({
   state: {
     popularMovies: [],
+    currentPage: 1,
     currentMovie: {},
     genres: [],
     favorites: []
@@ -26,13 +27,17 @@ export default createStore({
     },
     removeFavorite(state, movie_id) {
       state.favorites = state.favorites.filter(item => item.id !== movie_id)
+    },
+    incrementCurrentPage(state) {
+      state.currentPage++
     }
   },
   actions: {
-    async fetchPopularMovies({commit}, page) {
+    async fetchPopularMovies({commit, state}) {
       try {
-        const popular = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.VUE_APP_API_KEY}&page=${page}`)
+        const popular = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.VUE_APP_API_KEY}&page=${state.currentPage}`)
         commit('addPopular', popular.data.results)
+        commit('incrementCurrentPage')
       } catch (e) {
         console.log(e)
       }

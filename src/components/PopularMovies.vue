@@ -16,20 +16,14 @@ import MovieCard from "@/components/MovieCard";
 export default {
   name: "PopularMovies",
   components: {MovieCard},
-  data() {
-    return {
-      currentPage: 1
-    }
-  },
   async mounted() {
     if (!this.$store.state.popularMovies.length) {
-      await this.fetchMovies(1)
+      await this.fetchMovies()
     }
   },
   methods: {
-    async fetchMovies(page) {
-      await this.$store.dispatch('fetchPopularMovies', page)
-      this.currentPage = this.currentPage + 1
+    async fetchMovies() {
+      await this.$store.dispatch('fetchPopularMovies')
     }
   },
   computed: {
